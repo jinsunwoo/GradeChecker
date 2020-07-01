@@ -24,45 +24,37 @@
         android:text="Letter grade"
         android:layout_margin="2dp"
         android:gravity="center_horizontal"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-        app:layout_constraintStart_toStartOf="parent" />
+         />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="0dp"
+        app:layout_constrainedWidth="true"
         android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="2"
         android:text="Percentage value(%)"
         android:gravity="center_horizontal"
         android:layout_margin="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintStart_toEndOf="@+id/recyclerView" />
+        app:layout_constraintStart_toEndOf="@+id/textView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constrainedWidth="true"
         android:layout_margin="2dp"
-        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/recyclerView2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="0dp"
-        android:id="@+id/recyclerView2"
-        android:layout_height="0dp"
-        android:layout_margin="2dp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintHorizontal_weight="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/recyclerView"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

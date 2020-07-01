@@ -21,7 +21,6 @@ public class LauncherActivity extends AppCompatActivity {
                 Intent moveIntent = new Intent();
                 moveIntent.setClass(LauncherActivity.this, SettingActivity.class);
                 startActivity(moveIntent);
-
             }
         }, 2000);
 

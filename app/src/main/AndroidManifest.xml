@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CheckMarksActivity"></activity>
+        <activity android:name=".CourseWorksActivity"></activity>
+        <activity android:name=".DesiredCheckPopActivity" />
+        <activity android:name=".CheckMarksActivity" />
         <activity android:name=".CoursesActivity" />
         <activity android:name=".TermsActivity" />
         <activity android:name=".DeletePopActivity" />

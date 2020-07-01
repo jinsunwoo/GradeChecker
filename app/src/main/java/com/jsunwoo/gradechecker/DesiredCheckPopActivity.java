@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class DeletePopActivity extends AppCompatActivity {
+public class DesiredCheckPopActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.popup_message);
+        setContentView(R.layout.activity_desired_check_pop);
     }
 }
