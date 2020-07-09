@@ -1,24 +1,24 @@
 <resources>
     <string name="app_name">Grade Checker</string>
     <array name="letter_grade">
-        <item>A+</item>
+        <item>A +</item>
         <item>A</item>
-        <item>A-</item>
-        <item>B+</item>
+        <item>A -</item>
+        <item>B +</item>
         <item>B</item>
-        <item>B-</item>
-        <item>C+</item>
+        <item>B -</item>
+        <item>C +</item>
         <item>C</item>
-        <item>C-</item>
-        <item>D+</item>
+        <item>C -</item>
+        <item>D +</item>
         <item>D</item>
-        <item>D-</item>
-        <item>E+</item>
+        <item>D -</item>
+        <item>E +</item>
         <item>E</item>
-        <item>E-</item>
-        <item>F+</item>
+        <item>E -</item>
+        <item>F +</item>
         <item>F</item>
-        <item>F-</item>
+        <item>F -</item>
     </array>
     <array name="percentage_value">
         <item>90</item>

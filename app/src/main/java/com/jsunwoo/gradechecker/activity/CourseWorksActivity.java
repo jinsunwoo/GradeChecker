@@ -1,14 +1,16 @@
-package com.jsunwoo.gradechecker;
+package com.jsunwoo.gradechecker.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class CoursesActivity extends AppCompatActivity {
+import com.jsunwoo.gradechecker.R;
+
+public class CourseWorksActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_courses);
+        setContentView(R.layout.activity_course_works);
     }
 }
