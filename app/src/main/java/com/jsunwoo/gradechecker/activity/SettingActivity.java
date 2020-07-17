@@ -29,8 +29,10 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         Button saveBtn = findViewById(R.id.save_button);
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        // 위에서 설정한 APP 를 여기서 받음
         APP = ((GradeCheckerResources)getApplication());
         // 메인쓰레드랑 백그라운드쓰레드랑 따로 움직이는 거기 때문에 메인에서 쓰던 lga 가 변하지 않도록 final 상수 처리를 해줘야 백그라운드에서 꼬이지 않고 잘 받을 수 있어서.
+        // AsyncTask 자체가 백그라운드쓰레드 랑 관련된거
         new AsyncTask<Object, Object, Object>(){
             List<GradeScale> gradeScales;
             @Override

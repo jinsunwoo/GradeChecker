@@ -30,7 +30,7 @@ public class LetterGradeAdapter extends RecyclerView.Adapter<LetterGradeAdapter.
         this.letterGrade = context.getResources().getStringArray(R.array.letter_grade);
         this.gradeCriteria = context.getResources().getIntArray(R.array.percentage_value);
         this.gradescales = new GradeScale[letterGrade.length];
-        if(gradescales!=null) {
+        if(gradescales!=null&&gradescales.size()>0) {
             for (int i = 0; i < gradescales.size(); i++) {
                 this.gradescales[i] = gradescales.get(i);
             }
