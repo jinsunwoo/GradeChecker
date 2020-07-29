@@ -1,13 +1,8 @@
 package com.jsunwoo.gradechecker;
-
 import android.app.Application;
 import android.util.Log;
-
 import androidx.room.Room;
-
 import com.jsunwoo.gradechecker.manager.GradeCheckerDB;
-
-
 // 이 어플리케이션이 실행될 때 사용되는 인스턴스
 // 어플리케이션 [레시피 - 스테틱(근본적) , 음식 - 힙 (유동적-상황에 따라)]
 // 어플리케이션 키면, 레시피대로 실행시켜서 메모리상에 옮기는게 화면에 나옴

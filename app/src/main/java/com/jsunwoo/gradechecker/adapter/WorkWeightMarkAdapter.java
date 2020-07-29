@@ -1,5 +1,4 @@
 package com.jsunwoo.gradechecker.adapter;
-
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,12 +8,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.jsunwoo.gradechecker.R;
 import com.jsunwoo.gradechecker.entity.GradeScale;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +27,6 @@ public class WorkWeightMarkAdapter extends RecyclerView.Adapter<WorkWeightMarkAd
         return new ViewHolder(itemView);
     }
 
-
-
     @Override
     public void onBindViewHolder(@NonNull WorkWeightMarkAdapter.ViewHolder holder, final int position) {
         holder.gradeItem.setText("");
@@ -39,8 +34,6 @@ public class WorkWeightMarkAdapter extends RecyclerView.Adapter<WorkWeightMarkAd
         holder.gradeMark.setText("");
 
     }
-
-
 
     @Override
     public int getItemCount() {

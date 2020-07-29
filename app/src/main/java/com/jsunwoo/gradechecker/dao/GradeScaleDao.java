@@ -17,10 +17,10 @@ public interface GradeScaleDao {
     @Query("SELECT * FROM GradeScale")
     List<GradeScale> getAll();
     // (GradeScale... gradescales) => GradeScale 의 객체 이거나 객체의 배열이거나
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    // GradeScale 타입의 애를 하나 넣거나 여러개 넣는, 변수가 gradescales
+    // GradeScale 타입의 애를 하나 넣거나 여러개 넣는 (없을 수도 있음), 변수가 gradescales
     // 위에 insert 라고 쓴 커맨드를 행한 결과가 이 메쏘드 insertAll (이건 내가 만드는 것. dao에 없음)
     // annotation 이 있으면 위에, 그 아래에 있는 함수가 그 위에 있는 @ 대로 행동하게 되는것 (같이 움직임)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(GradeScale... gradescales);
     @Update
     int update(GradeScale... gradescales);
