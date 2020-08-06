@@ -13,6 +13,8 @@ public class WorkWeightMark {
     public int weight;
     @ColumnInfo
     public int mark;
+    @ColumnInfo(name ="course_id")
+    public int cid;
 }
 
 

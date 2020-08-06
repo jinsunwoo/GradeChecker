@@ -10,4 +10,6 @@ public class Course {
     public int cid;
     @ColumnInfo(name="course_name")
     public String courseName;
+    @ColumnInfo(name="term_id")
+    public int termId;
 }

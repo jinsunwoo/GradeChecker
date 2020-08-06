@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Entity;
 import com.jsunwoo.gradechecker.GradeCheckerResources;
 import com.jsunwoo.gradechecker.R;
+import com.jsunwoo.gradechecker.activity.CourseWorksActivity;
 import com.jsunwoo.gradechecker.activity.CoursesActivity;
 import com.jsunwoo.gradechecker.activity.SettingActivity;
 import com.jsunwoo.gradechecker.activity.TermsActivity;
@@ -112,10 +113,19 @@ public class TermCourseAdapter extends RecyclerView.Adapter<TermCourseAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent moveIntent = new Intent(context, CoursesActivity.class);
-                moveIntent.putExtra("selectedTermID",terms.get(position).tid);
-                // context 받으려면 APP 가져온거 연결해서 받으려고
-                context.startActivity(moveIntent);
+                if(terms!=null) {
+                    Intent moveIntent = new Intent(context, CoursesActivity.class);
+                    moveIntent.putExtra("selectedTermID",terms.get(position).tid);
+                    moveIntent.putExtra("selectedTermName",terms.get(position).termName);
+                    // context 받으려면 APP 가져온거 연결해서 받으려고
+                    context.startActivity(moveIntent);
+                }else{
+                    Intent moveIntent = new Intent(context, CourseWorksActivity.class);
+                    moveIntent.putExtra("selectedCourseID",courses.get(position).cid);
+                    moveIntent.putExtra("selectedTermName",courses.get(position).courseName);
+                    context.startActivity(moveIntent);
+
+                }
             }
         });
 
