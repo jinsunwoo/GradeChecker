@@ -122,7 +122,7 @@ public class TermCourseAdapter extends RecyclerView.Adapter<TermCourseAdapter.Vi
                 }else{
                     Intent moveIntent = new Intent(context, CourseWorksActivity.class);
                     moveIntent.putExtra("selectedCourseID",courses.get(position).cid);
-                    moveIntent.putExtra("selectedTermName",courses.get(position).courseName);
+                    moveIntent.putExtra("selectedCourseName",courses.get(position).courseName);
                     context.startActivity(moveIntent);
 
                 }
@@ -142,10 +142,17 @@ public class TermCourseAdapter extends RecyclerView.Adapter<TermCourseAdapter.Vi
 
     // termsActivity 에서 addterm 했을 때 새로고침 하기 전에 tca 랑 term 이랑 연결해 주는 거
     // 새로 받아와서 사용 editable list 도 다시 디폴트값
-    public void setList(List<Term> terms) {
+    public void setListTerm(List<Term> terms) {
         this.terms=terms;
-        editable_list = new ArrayList<>();
+        this.editable_list = new ArrayList<>();
         for (int i=0;i<terms.size();i++)
+            editable_list.add(false);
+    }
+
+    public void setListCourse(List<Course> courses) {
+        this.courses=courses;
+        this.editable_list = new ArrayList<>();
+        for(int i=0;i<courses.size();i++)
             editable_list.add(false);
     }
 

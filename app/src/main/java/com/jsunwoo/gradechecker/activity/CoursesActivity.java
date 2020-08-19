@@ -17,13 +17,13 @@ import com.jsunwoo.gradechecker.R;
 import com.jsunwoo.gradechecker.adapter.TermCourseAdapter;
 import com.jsunwoo.gradechecker.entity.Course;
 import com.jsunwoo.gradechecker.entity.Term;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CoursesActivity extends AppCompatActivity {
     private GradeCheckerResources APP;
     private TermCourseAdapter tca;
+    List<Course> courses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +34,39 @@ public class CoursesActivity extends AppCompatActivity {
         TextView tv = findViewById(R.id.termTitle);
         final RecyclerView rv = findViewById(R.id.recyclerView3);
         // 두번째 파라미터는 값이 없을 경우 어떻게 할지 => return -1
+        // 해당되는 termTitle 이 course 페이지에 위에 뜨게
         Intent intent = getIntent();
         final int termId=intent.getIntExtra("selectedTermID", -1);
         String termName=intent.getStringExtra("selectedTermName");
         tv.setText(termName);
         Log.i("TAG", "onCreate term id : "+termId);
+
         APP = (GradeCheckerResources) getApplication();
 
         addCourseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent moveIntent = new Intent(CoursesActivity.this, CourseWorksActivity.class);
-                startActivity(moveIntent);
+                final Course newcourse = new Course();
+                newcourse.courseName = "Edit Course Name";
+
+                new AsyncTask<Object,Object,Object>(){
+                    @Override
+                    protected Object doInBackground(Object... objects) {
+                        // 새로운 Term 객체를 DB 에 밀어넣고
+                        APP.db.cdao().insertAll(newcourse);
+                        // 추가된 Term 객체 포함한 전체 Terms 들을 DB 에서 가져와서 terms 에 할당 (UPDATE)
+                        courses = APP.db.cdao().getAll();
+                        // 업데이트 된 terms 를 어댑터 tca 와 연결
+                        tca.setListCourse(courses);
+                        Log.i("doInBackground: course size", courses.size()+"");
+                        return null;
+                    }
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
+                        tca.notifyDataSetChanged();
+                    }
+                }.execute();
             }
         });
 
@@ -64,7 +85,7 @@ public class CoursesActivity extends AppCompatActivity {
                 // 데이터를 가지고 왔고 (아래는) 데이터가 없는 경우
                 int maxCid = APP.db.cdao().getCountAll();
                 courses = APP.db.cdao().getTermIDforBridge(termId);
-                Log.i("termId Check", "doInBackground: "+ courses);
+                Log.i("courseId Check", "doInBackground: "+ courses);
 
                 // 포인터도 없는 경우랑 포인터는 있는데 데이터가 없는 경우 두가지 다 고려. 오류 있는 경우는 -1 도 나와서 0이랑 음수 포함 (안전성 위해서)
                 if (courses==null||courses.size()<=0) {
@@ -94,7 +115,5 @@ public class CoursesActivity extends AppCompatActivity {
                 rv.setAdapter(tca);
             }
         }.execute();
-
-
     }
 }

@@ -2,18 +2,24 @@ package com.jsunwoo.gradechecker.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.jsunwoo.gradechecker.GradeCheckerResources;
 import com.jsunwoo.gradechecker.R;
 import com.jsunwoo.gradechecker.adapter.TermCourseAdapter;
 import com.jsunwoo.gradechecker.adapter.WorkWeightMarkAdapter;
 import com.jsunwoo.gradechecker.entity.Course;
+import com.jsunwoo.gradechecker.entity.Term;
 import com.jsunwoo.gradechecker.entity.WorkWeightMark;
 
 import java.util.ArrayList;
@@ -22,7 +28,7 @@ import java.util.List;
 public class CourseWorksActivity extends AppCompatActivity {
     private GradeCheckerResources APP;
     private WorkWeightMarkAdapter tca;
-
+    List<WorkWeightMark> wwms ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +36,31 @@ public class CourseWorksActivity extends AppCompatActivity {
         Intent intent = getIntent();
         APP = (GradeCheckerResources) getApplication();
         final RecyclerView rv = findViewById(R.id.recyclerView4);
+        TextView tv = findViewById(R.id.courseName);
+        Button addRow = findViewById(R.id.add_wwm);
         final int courseId=intent.getIntExtra("selectedCourseID", -1);
         String courseName=intent.getStringExtra("selectedCourseName");
+        tv.setText(courseName);
+
+        addRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            // termName 이 "Edit Term Name" 인 Term 객체 하나 만들고
+            public void onClick(View v) {
+                // Async 쓸때는 메인 쓰레드, 백그라운드 쓰레드 따로 쓰다보니까, 백그라운드 쓰레드에서 쓰는 변수는 final 처리를 해줘야 주소값 변경도 안되고 null point 안뜸
+                final WorkWeightMark newwwm = new WorkWeightMark();
+                newwwm.gradeItem = "";
+                newwwm.weight = 0;
+                newwwm.mark = 0;
+                // 코스랑 연결해야 하니까
+                newwwm.cid = courseId;
+                wwms.add(newwwm);
+                tca = new WorkWeightMarkAdapter(CourseWorksActivity.this, wwms);
+                rv.setAdapter(tca);
+            }
+        });
 
         new AsyncTask<Object, Object, Object>(){
-            List<WorkWeightMark> wwms ;
+
             @Override
             protected Object doInBackground(Object[] objects) {
                 // 데이터를 가지고 왔고 (아래는) 데이터가 없는 경우
@@ -60,6 +86,7 @@ public class CourseWorksActivity extends AppCompatActivity {
                 return null;
             }
 
+
             @SuppressLint("StaticFieldLeak")
             @Override
             protected void onPostExecute(Object o) {
@@ -74,7 +101,21 @@ public class CourseWorksActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        // appcompatactivity 를 상속받은걸 실행해줘야 해서 async 포함 하면 안됨
         super.onPause();
+        new AsyncTask<Object, Object, Object>() {
+            @Override
+            protected Object doInBackground(Object... objects) {
+                WorkWeightMark[] wwmArray = new WorkWeightMark[wwms.size()];
+                // termArray 타입으로 받으려고 가로안에 (termArray) 씀. 배열의 개수가 필요해서. 그래서 변수에 넣어줌.
+                wwmArray = wwms.toArray(wwmArray);
+                APP.db.wwmdao().insertAll(wwmArray);
+
+                return null;
+            }
+        }.execute();
+
+
         // TODO 현재 화면 꺼졌을때. 여기서 저장하는거 == 텍스트와처 -- 어댑터에서 --
         // FIXME 고칠내용.
     }

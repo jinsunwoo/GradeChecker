@@ -32,9 +32,9 @@ public class TermsActivity extends AppCompatActivity {
         TextView setting = findViewById(R.id.setting_textView);
         final Button addTermBtn = findViewById(R.id.addTerm_button);
         final RecyclerView rv = findViewById(R.id.terms_recyclerView);
-
+        // DB 작업 할 수 있는 수단
         APP = ((GradeCheckerResources)getApplication());
-
+        // setting 버튼 누르면 현 페이지에서 SettingActivity.class 해당하는 페이지로 이동
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,44 +42,48 @@ public class TermsActivity extends AppCompatActivity {
                 startActivity(moveIntent);
             }
         });
-
+        // Add new Term 버튼 누르면
         addTermBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            // 어씽크 쓸때는 메인이랑 백그라운드 쓰레드 따로 쓰다보니까 백그라운드 쓰레드에서 쓰는 변수는 final 처리 해야지 주소값 변경 안되고 null point 안뜸
+            // termName 이 "Edit Term Name" 인 Term 객체 하나 만들고
             public void onClick(View v) {
+                // Async 쓸때는 메인 쓰레드, 백그라운드 쓰레드 따로 쓰다보니까, 백그라운드 쓰레드에서 쓰는 변수는 final 처리를 해줘야 주소값 변경도 안되고 null point 안뜸
                 final Term newterm = new Term();
-                newterm.termName = "Edit term name";
+                newterm.termName = "Edit Term Name";
 
                 new AsyncTask<Object,Object,Object>(){
                     @Override
                     protected Object doInBackground(Object... objects) {
+                        // 새로운 Term 객체를 DB 에 밀어넣고
                         APP.db.tdao().insertAll(newterm);
-                        // 바뀐걸로 다시 가져오는
+                        // 추가된 Term 객체 포함한 전체 Terms 들을 DB 에서 가져와서 terms 에 할당 (UPDATE)
                         terms = APP.db.tdao().getAll();
-                        // 어댑터랑 terms이랑 연결
-                        tca.setList(terms);
+                        // 업데이트 된 terms 를 어댑터 tca 와 연결
+                        tca.setListTerm(terms);
                         Log.i("doInBackground: term size", terms.size()+"");
                         return null;
                     }
-
+                    // tca 어댑터가 변화된(추가된) 데이터 감지하게
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
-
                         tca.notifyDataSetChanged();
                     }
                 }.execute();
-
             }
         });
 
+        /*
+            현재 DB 에 User 에 의해 저장된 Term 정보가 없을 때 (초기설정상태)
+            임의로 Term1, Term2, Term3 를 만들어서 DB 에 넣어줌
+             */
         new AsyncTask<Object, Object, Object>(){
-
             @Override
             protected Object doInBackground(Object[] objects) {
-                // 데이터를 가지고 왔고 (아래는) 데이터가 없는 경우
+                // DB 에 저장되있는 Term 객체들을 가져와 terms 에 넣어줌
                 terms = APP.db.tdao().getAll();
-                // 포인터도 없는 경우랑 포인터는 있는데 데이터가 없는 경우 두가지 다 고려. 오류 있는 경우는 -1 도 나와서 0이랑 음수 포함 (안전성 위해서)
+                // DB 에서 가져온 Term 객체가 없는 경우 임의로 term 1, 2, 3 만들어서 terms 에 넣어줌
+                // 포인터도 없는 경우, 포인터는 있는데 데이터가 없는 경우, 오류가 있는 경우(-1) 모두 체크
                 if (terms==null||terms.size()<=0) {
                     terms = new ArrayList<>();
                      for (int i =0;i<3;i++) {
@@ -88,9 +92,12 @@ public class TermsActivity extends AppCompatActivity {
                         term.termName = "Term "+(i+1);
                         terms.add(term);
                     }
+                     // 사이즈 3 짜리 Term 타입의 어레이 termArray 를 만들어서
                     Term[] termArray = new Term[terms.size()];
-                    // termArray 타입으로 받으려고 가로안에 (termArray) 씀. 배열의 개수가 필요해서. 그래서 변수에 넣어줌.
+                    // 아까 만든 어레이리스트 terms 를 어레이로 변환 후 위에서 만든 termArray 에 할당해줌
+                    // termArray 타입으로 받으러고 가로안에 (termArray) 넣어줌
                     termArray = terms.toArray(termArray);
+                    // 새로만든 임의의 termArray DB 에 넣어줌
                     APP.db.tdao().insertAll(termArray);
                 }
                 return null;
@@ -100,8 +107,7 @@ public class TermsActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                // TermsActivity.this 안쓰는게 어댑터에서 context 안받았으니까// (수정됨 아래)
-                // 컨택스트 자리에 TermsAcitivity 넣어주면 액태비티는 어차피 컨택스트 가지고 있으니까 이걸로 대신해도 됨
+                // context 자리에 TermsActivity 넣어줘도 어차피 activity 는 context 가지고 있으므로 이걸로 대체 됨
                 tca = new TermCourseAdapter(terms, null, TermsActivity.this);
                 rv.setAdapter(tca);
             }
