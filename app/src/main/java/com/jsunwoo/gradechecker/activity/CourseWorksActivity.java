@@ -48,7 +48,7 @@ public class CourseWorksActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Async 쓸때는 메인 쓰레드, 백그라운드 쓰레드 따로 쓰다보니까, 백그라운드 쓰레드에서 쓰는 변수는 final 처리를 해줘야 주소값 변경도 안되고 null point 안뜸
                 final WorkWeightMark newwwm = new WorkWeightMark();
-                newwwm.gradeItem = "";
+                newwwm.gradeItem = "Press to edit";
                 newwwm.weight = 0;
                 newwwm.mark = 0;
                 // 코스랑 연결해야 하니까
@@ -72,7 +72,7 @@ public class CourseWorksActivity extends AppCompatActivity {
                     for (int i =0;i<5;i++) {
                         WorkWeightMark wwm = new WorkWeightMark();
                         wwm.wid = ++maxWWMid;
-                        wwm.gradeItem = "";
+                        wwm.gradeItem = "Press to edit";
                         wwm.mark = 0;
                         wwm.weight = 0;
                         wwm.cid=courseId;

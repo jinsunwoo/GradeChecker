@@ -1,5 +1,7 @@
 package com.jsunwoo.gradechecker.adapter;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,10 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.jsunwoo.gradechecker.GradeCheckerResources;
 import com.jsunwoo.gradechecker.R;
 import com.jsunwoo.gradechecker.activity.CourseWorksActivity;
 import com.jsunwoo.gradechecker.entity.GradeScale;
 import com.jsunwoo.gradechecker.entity.WorkWeightMark;
+import com.jsunwoo.gradechecker.popup.PopUpWWM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +39,7 @@ public class WorkWeightMarkAdapter extends RecyclerView.Adapter<WorkWeightMarkAd
     @Override
     public WorkWeightMarkAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.item_work_weight_mark, parent, false);
-        return new ViewHolder(itemView, new WWMcustomEditTextListner());
+        return new ViewHolder(itemView);
     }
 
 
@@ -44,8 +49,39 @@ public class WorkWeightMarkAdapter extends RecyclerView.Adapter<WorkWeightMarkAd
         holder.gradeItem.setText(wwms.get(position).gradeItem);
         holder.gradeWeight.setText(wwms.get(position).weight+"");
         holder.gradeMark.setText(wwms.get(position).mark+"");
-        holder.wWMcustomEditTextListner.updatePosition(position);
+        holder.gradeItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopUpWWM popup = new PopUpWWM(context);
+                popup.setWwm(wwms.get(position));
+                // 팝업이 나오게!
+                popup.show();
+                popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    // 팝업이 꺼질 때 뭘할지
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        final GradeCheckerResources APP = (GradeCheckerResources) context.getApplicationContext();
+                        // 업데이트 된 내용으로 바꿔 줌 wwms 를
+                        new AsyncTask<Object, Object, Object>() {
+                            @Override
+                            protected Object doInBackground(Object... objects) {
+                                wwms=APP.db.wwmdao().getCourseIDforBridge(wwms.get(0).cid);
+                                return null;
+                            }
 
+                            @Override
+                            protected void onPostExecute(Object o) {
+                                super.onPostExecute(o);
+                                // 데이터가 바뀌었으니까 새로고침
+                                notifyDataSetChanged();
+                            }
+                        }.execute();
+
+
+                    }
+                });
+            }
+        });
     }
 
 
@@ -60,43 +96,19 @@ public class WorkWeightMarkAdapter extends RecyclerView.Adapter<WorkWeightMarkAd
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        EditText gradeItem;
-        EditText gradeWeight;
-        EditText gradeMark;
-        WWMcustomEditTextListner wWMcustomEditTextListner;
-        public ViewHolder(@NonNull View itemView, WWMcustomEditTextListner wWMcustomEditTextListner) {
+        TextView gradeItem;
+        TextView gradeWeight;
+        TextView gradeMark;
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             gradeItem = itemView.findViewById(R.id.grade_item_editText);
-            this.wWMcustomEditTextListner=wWMcustomEditTextListner;
-            gradeItem.addTextChangedListener(wWMcustomEditTextListner);
+            //gradeItem.addTextChangedListener(wWMcustomEditTextListner);
             gradeWeight = itemView.findViewById(R.id.grade_weight_editText);
             gradeMark = itemView.findViewById(R.id.grade_mark_editText);
         }
     }
 
-    private class WWMcustomEditTextListner implements TextWatcher {
 
-        private int position;
-
-        public void updatePosition(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            wwms.get(position).gradeItem = s.toString();
-        }
-    }
 
 }
 

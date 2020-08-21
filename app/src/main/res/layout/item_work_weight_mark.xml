@@ -4,8 +4,9 @@
     android:layout_height="wrap_content"
     >
 
-        <EditText
+        <TextView
             android:id="@+id/grade_item_editText"
+            android:text="Press to edit"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="55dp"
@@ -13,7 +14,7 @@
             android:layout_marginEnd="15dp"
             />
 
-        <EditText
+        <TextView
             android:layout_weight="1"
             android:id="@+id/grade_weight_editText"
             android:layout_width="0dp"
@@ -22,7 +23,7 @@
             android:layout_marginEnd="15dp"
             />
 
-        <EditText
+        <TextView
             android:id="@+id/grade_mark_editText"
             android:layout_width="0dp"
             android:layout_weight="1"

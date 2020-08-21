@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TermsActivity extends AppCompatActivity {
-    private List<Term> terms ;
+    private List<Term> terms;
     private GradeCheckerResources APP;
     private TermCourseAdapter tca;
 

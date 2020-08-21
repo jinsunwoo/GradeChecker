@@ -47,6 +47,7 @@ public class CoursesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Course newcourse = new Course();
+                newcourse.termId = termId;
                 newcourse.courseName = "Edit Course Name";
 
                 new AsyncTask<Object,Object,Object>(){
@@ -55,7 +56,7 @@ public class CoursesActivity extends AppCompatActivity {
                         // 새로운 Term 객체를 DB 에 밀어넣고
                         APP.db.cdao().insertAll(newcourse);
                         // 추가된 Term 객체 포함한 전체 Terms 들을 DB 에서 가져와서 terms 에 할당 (UPDATE)
-                        courses = APP.db.cdao().getAll();
+                        courses = APP.db.cdao().getTermIDforBridge(termId);
                         // 업데이트 된 terms 를 어댑터 tca 와 연결
                         tca.setListCourse(courses);
                         Log.i("doInBackground: course size", courses.size()+"");
